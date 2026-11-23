@@ -24,6 +24,7 @@ Resumo rápido. Decisões com impacto real na arquitetura ganham um ADR em [adr/
 | 16 | Nome do projeto: **Overbook** | Overbooking é confirmar mais reservas do que vagas: o nome aponta direto para o problema central de concorrência. A descrição do repositório explica que é um sistema de reservas para estúdios |
 | 17 | Foco do projeto: **aprendizado e trabalho em equipe** | Projeto de estudo, não comercial |
 | 18 | IA com **autonomia gradual** | Responde sozinha só em categorias de baixo risco e com confiança acima de um limite escolhido pela avaliação; o resto vai para revisão humana. Começa com revisão humana em tudo. Detalhes na seção 6.2 do [BRIEFING.md](BRIEFING.md) |
+| 19 | Licença **MIT** | A mais comum e simples para projetos abertos: qualquer pessoa pode ler, usar e adaptar o código, mantendo o aviso de autoria |
 
 ## Em aberto
 
@@ -34,4 +35,3 @@ Resumo rápido. Decisões com impacto real na arquitetura ganham um ADR em [adr/
 | Modelo do Claude para classificar | Fase de integração com IA | Um modelo pequeno (família Haiku) costuma bastar para classificação; a avaliação confirma |
 | Número de WhatsApp para testes | Fase de mensagens | A Evolution não é a API oficial: há risco de bloqueio do número. Preferir um chip secundário |
 | Onde fazer o deploy | Quando a parte de cobrança estiver completa | |
-| Licença do repositório | Antes de tornar público | MIT é a mais comum em portfólio |

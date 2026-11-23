@@ -47,3 +47,7 @@ Docker Compose · GitHub Actions · Stripe Billing · Evolution API (WhatsApp) �
 ## Equipe
 
 Dois desenvolvedores e um tech lead.
+
+## Licença
+
+[MIT](LICENSE)
