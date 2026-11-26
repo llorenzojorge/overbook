@@ -29,3 +29,7 @@ Thumbs.db
 
 # Local notes and Claude Code instructions (not public)
 *.local.md
+
+# Locally installed agent skills (not public)
+.agents/
+.claude/skills/
