@@ -9,7 +9,9 @@ instante. Evitar esse bug, e outros do mesmo tipo, é o assunto deste projeto.
 
 ## O que o sistema faz
 
-- **Planos:** assinatura recorrente (mensal, trimestral, anual) ou pacote de créditos, com Stripe em modo teste.
+- **Planos:** assinatura recorrente (mensal, trimestral, anual) ou diária avulsa, com Stripe em modo teste.
+- **Estúdios:** vários estúdios no mesmo sistema, cada um com suas modalidades. Aulas em turma exigem reserva;
+  áreas como a musculação são de acesso livre.
 - **Reservas:** turmas com vagas limitadas, cancelamento com prazo e lista de espera.
 - **Atendimento inteligente:** alunos falam com o estúdio pelo WhatsApp; uma IA classifica as mensagens e sugere
   respostas. Ela responde sozinha só em casos de baixo risco; o resto passa por um atendente.
@@ -23,7 +25,7 @@ cada um com um teste e só então corrigir**:
 |---|---|
 | **Concorrência** | 30 alunos tentam reservar as 12 vagas de uma aula no mesmo segundo |
 | **Idempotência** | Clique duplo em "Assinar" não pode gerar duas assinaturas |
-| **Transações** | Reservar ocupa a vaga e debita o crédito: tudo ou nada |
+| **Transações** | Confirmar uma diária registra o pagamento e garante a vaga: tudo ou nada |
 | **Webhooks** | O aluno paga e fecha o navegador; o sistema descobre pelo webhook, que pode chegar duplicado ou fora de ordem |
 | **Máquina de estados** | Assinatura ativa, atrasada ou cancelada, com transições inválidas rejeitadas |
 | **Filas e resiliência** | Nenhuma mensagem se perde, mesmo com o worker caindo ou a IA fora do ar |
@@ -39,14 +41,23 @@ Docker Compose · GitHub Actions · Stripe Billing · Evolution API (WhatsApp) �
 
 ## Documentação
 
-- [Briefing](docs/BRIEFING.md): origem, objetivos, produto, equipe e uso de IA
+- [Visão técnica](docs/VISAO-TECNICA.md): como o sistema funciona (atores, fluxos e regras de negócio)
+- [Briefing](docs/BRIEFING.md): motivação, objetivos, produto, equipe e uso de IA
 - [Decisões](docs/DECISOES.md): o que já foi decidido e o que está em aberto
 - [ADRs](docs/adr/): registro detalhado de cada decisão de arquitetura
 - [CLAUDE.md](CLAUDE.md): como usamos IA no desenvolvimento
 
 ## Equipe
 
-Dois desenvolvedores e um tech lead.
+| Papel | Pessoa |
+|---|---|
+| Desenvolvedor | Lorenzo Jorge ([@llorenzojorge](https://github.com/llorenzojorge)) |
+| Desenvolvedor | Matheus ([@matheuscostabeber](https://github.com/matheuscostabeber)) |
+| Tech lead | Vinícius ([@eovinicius](https://github.com/eovinicius)) |
+| Tech lead | Maurício |
+
+Os requisitos, a arquitetura e a modelagem de dados são feitos pelos desenvolvedores; os tech leads orientam e
+revisam. A IA é usada com regras definidas no [CLAUDE.md](CLAUDE.md).
 
 ## Licença
 

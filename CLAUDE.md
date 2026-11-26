@@ -4,22 +4,22 @@ Este arquivo é lido pelo Claude Code em toda sessão. Ele define **como** traba
 
 ## O que é este projeto
 
-**Overbook** — projeto de aprendizado e portfólio: um sistema para um **estúdio de aulas em turma** (pilates, crossfit, funcional),
-com **assinaturas e pacotes de créditos** (Stripe em modo teste), **reservas com vagas limitadas e lista de espera**, e
+**Overbook** — projeto de estudo: um sistema multi-tenant para **estúdios de aulas em turma** (box, spinning, dança, pilates),
+com modalidades que exigem reserva e áreas de acesso livre (como a musculação),
+com **assinaturas e diárias** (Stripe em modo teste), **reservas com vagas limitadas e lista de espera**, e
 uma **central de atendimento com triagem por IA** (mensagens chegam pelo WhatsApp, a IA classifica e sugere resposta;
 responde sozinha só em categorias de baixo risco com confiança alta, o resto um humano revisa).
 
 O objetivo **não é só entregar o software**. É aprender a identificar e resolver problemas reais de backend:
 concorrência, idempotência, transações, webhooks, filas, falhas de serviços externos e avaliação de IA.
-Quem ler o repositório deve ver capacidade de identificar e resolver problemas, não só código funcionando.
 
 **Comece por [docs/BRIEFING.md](docs/BRIEFING.md)**: intenção, aprendizados, equipe e uso de IA.
 
-Decisões: [docs/DECISOES.md](docs/DECISOES.md) · ADRs: [docs/adr/](docs/adr/)
+Visão técnica: [docs/VISAO-TECNICA.md](docs/VISAO-TECNICA.md) · Decisões: [docs/DECISOES.md](docs/DECISOES.md) · ADRs: [docs/adr/](docs/adr/)
 
 ## Papéis
 
-Equipe: **dois desenvolvedores** em início de carreira e **um tech lead** sênior. A proposta de divisão entre eles está
+Equipe: **dois desenvolvedores** em início de carreira e **dois tech leads** seniores. A proposta de divisão entre eles está
 na seção 5 do [BRIEFING.md](docs/BRIEFING.md). "O desenvolvedor" abaixo vale para qualquer um dos dois.
 
 **O desenvolvedor é responsável por:**
@@ -57,7 +57,7 @@ Todo problema técnico relevante segue esta ordem:
 2. **Discutir soluções**: pelo menos duas, com trade-offs.
 3. **Implementar** a escolhida.
 4. **Provar a correção**: o mesmo teste agora passa.
-5. **Registrar**: um PR por problema e um ADR curto. O ADR vira base do post técnico.
+5. **Registrar**: um PR por problema e um ADR curto.
 
 ## Stack (decidida)
 

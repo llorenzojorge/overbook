@@ -27,5 +27,5 @@ Thumbs.db
 # Claude Code local settings
 .claude/settings.local.json
 
-# Claude Code local instructions (not public)
-CLAUDE.local.md
+# Local notes and Claude Code instructions (not public)
+*.local.md

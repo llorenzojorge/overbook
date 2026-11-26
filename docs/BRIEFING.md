@@ -12,24 +12,19 @@
 
 ---
 
-## 1. A origem: o vídeo do CTO
+## 1. Motivação
 
-A ideia nasceu de um vídeo em que o CTO de uma empresa de tecnologia em Portugal comenta o que gostaria de ver no
-GitHub de um desenvolvedor júnior.
+### 1.1 O problema que interessa
 
-### 1.1 A tese central
+Fazer CRUD, rotas e autenticação é o ponto de partida de qualquer API. O que este projeto explora é o passo
+seguinte: olhar para um sistema e perguntar "o que acontece se duas pessoas fizerem isso ao mesmo tempo?",
+"e se esta requisição chegar duas vezes?", "e se o processo cair no meio?".
 
-- **Qualquer pessoa consegue desenvolver uma API.** Fazer CRUD, rotas e autenticação já não diferencia ninguém.
-- **O diferencial é identificar um problema numa API e resolvê-lo.** Saber olhar para um sistema e perguntar:
-  "o que acontece se duas pessoas fizerem isso ao mesmo tempo?", "e se esta requisição chegar duas vezes?",
-  "e se o processo cair no meio?".
-- **Conceitos que importam:** concorrência, idempotência e transações.
+Exemplo: duas pessoas reservam a última vaga de uma aula ao mesmo tempo. Sem cuidado, o sistema confirma mais
+reservas do que vagas. O projeto **prova** cada bug desse tipo com um teste, discute as soluções e mostra o mesmo
+teste passando depois da correção. Os conceitos centrais são concorrência, idempotência e transações.
 
-Exemplo de pensamento crítico que motivou o projeto: duas pessoas compram o último item do estoque ao mesmo tempo.
-Sem cuidado, o sistema vende mais do que tem. Um júnior que **prova** esse bug com um teste, discute as soluções
-e mostra o teste passando depois da correção demonstra maturidade que um CRUD não demonstra.
-
-### 1.2 O projeto favorito dele: assinaturas e pagamentos
+### 1.2 Assinaturas e pagamentos
 
 - Um sistema de **assinaturas** com planos **mensal, trimestral e anual**, usando um gateway de pagamento em
   **ambiente de teste**.
@@ -45,13 +40,12 @@ e mostra o teste passando depois da correção demonstra maturidade que um CRUD 
   - e se um webhook se perder de vez? (**reconciliação**: comparar o banco com o gateway periodicamente);
   - a assinatura muda de estado (ativa, atrasada, cancelada) e nem toda transição é válida (**máquina de estados**).
 
-### 1.3 O outro projeto citado: atendimento inteligente
+### 1.3 Atendimento inteligente
 
-- Uma empresa recebe **cerca de 500 mensagens por dia**: "fui cobrado duas vezes", "não consigo logar",
-  "quero cancelar".
+- Um negócio recebe muitas mensagens por dia: "fui cobrado duas vezes", "não consigo logar", "quero cancelar".
 - O backend usa IA para **classificar** a mensagem, **encaminhar** ao setor certo e **sugerir uma resposta**,
   que um humano da equipe **revisa** antes de enviar.
-- O que o CTO avaliaria:
+- As perguntas que o projeto precisa responder:
   1. **A diferença entre integrar uma IA e desenvolver com IA** (ver seção 6.1).
   2. **Como validar a resposta da IA.** A IA pode devolver JSON quebrado, uma categoria que não existe,
      uma resposta inventada.
@@ -62,9 +56,9 @@ e mostra o teste passando depois da correção demonstra maturidade que um CRUD 
      com a classificação da IA a cada mudança de prompt ou de modelo.
      **Ter dados que mostram que funciona, não achar que funciona.**
 
-### 1.4 Por que juntar as duas ideias
+### 1.4 Por que juntar os dois temas
 
-As duas se conectam naturalmente: as mensagens que chegam no atendimento são justamente sobre a assinatura
+Os dois temas se conectam naturalmente: as mensagens que chegam no atendimento são justamente sobre a assinatura
 ("fui cobrado duas vezes", "paguei e não consigo reservar", "quero cancelar o plano"). Um único produto cobre os dois
 conjuntos de problemas, e na fase final a triagem pode consultar o contexto de cobrança do cliente.
 
@@ -80,23 +74,20 @@ conjuntos de problemas, e na fase final a triagem pode consultar o contexto de c
   viabilidade comercial.
 - **Trabalhar em equipe** também é objetivo: revisão de código, divisão de trabalho, discussão de decisões,
   explicar o próprio código para outra pessoa.
-- **Portfólio:** quem ler o repositório deve ver capacidade de identificar e resolver problemas, não só código
-  funcionando.
-- **Conteúdo:** cada problema resolvido vira um post técnico no LinkedIn.
 
 ### 2.2 Quem somos
 
 - **Dois desenvolvedores em início de carreira**, que querem aprender exatamente as mesmas coisas.
   Já fizemos APIs com Express, Prisma, JWT e CRUD. Usamos IA no desenvolvimento de forma deliberada, mas com uma
   regra: **cada linha das partes centrais precisa ser entendida e explicável por nós** (ver seção 6.3).
-- **Um tech lead**, desenvolvedor sênior, que vai orientar e revisar (ver seção 5).
+- **Dois tech leads**, desenvolvedores seniores, que orientam e revisam (ver seção 5).
 
 ### 2.3 Como sabemos que deu certo
 
 - Cada problema central foi **provado com um teste antes** de ser resolvido, e o mesmo teste passa depois.
-- Cada um dos dois devs consegue **explicar sem ajuda**, como numa entrevista, qualquer problema central do projeto,
-  inclusive os que o outro implementou.
-- Existe um ADR para cada decisão importante e um post para cada problema resolvido.
+- Cada um dos dois devs consegue **explicar sem ajuda** qualquer problema central do projeto, inclusive os que o
+  outro implementou.
+- Existe um ADR para cada decisão importante.
 - Qualquer pessoa roda o projeto com `docker compose up`.
 
 ---
@@ -152,31 +143,53 @@ gera todos eles de forma natural.
 
 ### 4.1 Por que estúdio
 
-Escolhemos o estúdio (pilates, crossfit, funcional, yoga) porque ele tem **algo escasso: vagas limitadas em cada aula**.
-Isso gera concorrência de verdade, o caso clássico de "várias pessoas querendo a última vaga".
+Escolhemos o estúdio porque ele tem **algo escasso: vagas limitadas em cada aula**. O foco são as **modalidades em
+turma** (box, jiu-jitsu, spinning, dança, pilates), que ocupam uma sala com limite de pessoas e por isso exigem
+reserva. Isso gera concorrência de verdade, o caso clássico de "várias pessoas querendo a última vaga".
 
-Histórico da escolha, para contexto:
-- **Plataforma de cursos** (primeira ideia): descartada porque não tem nada escasso. Todo assinante vê o mesmo
-  conteúdo, então a concorrência só aparecia em casos técnicos.
-- **Agendamento com sinal**, **ingressos para eventos** e **cobrança por Pix para autônomos**: consideradas.
-- **Academia tradicional** (musculação): descartada porque o acesso é livre, sem vagas para disputar.
-- **Estúdio**: escolhido. Começamos com **uma modalidade**; o modelo de turmas é o mesmo para várias.
+O estúdio também pode ter uma **área de acesso livre**, como a musculação: os aparelhos ficam disponíveis e o aluno
+usa sem reservar. Por isso cada modalidade define se **exige reserva** ou é **de acesso livre**. Os problemas de
+concorrência estão nas modalidades com reserva.
+
+O sistema atende **vários estúdios** (multi-tenant). Cada estúdio cadastra as próprias modalidades, salas,
+instrutores e turmas. Assim é possível montar estúdios com configurações diferentes para testar o sistema sem
+duplicar a instalação.
+
+Cada estúdio é uma empresa independente (um CNPJ). Por isso:
+- o aluno pertence a **um único estúdio**, e o plano dele vale só nesse estúdio;
+- o administrador de um estúdio é o proprietário e **não tem acesso aos dados de outro estúdio**;
+- novos estúdios são criados pela equipe do sistema, não pelos proprietários;
+- quem treina em dois estúdios tem **um cadastro em cada um**. O e-mail é único por estúdio, então o login
+  identifica o estúdio.
+
+Os perfis têm dois níveis: a **equipe do sistema**, que atua sobre todos os estúdios, e os **papéis dentro de cada
+estúdio** (proprietário, recepção, instrutor e aluno). Uma pessoa pode ter mais de um papel no mesmo estúdio, como
+um instrutor que também é aluno.
 
 ### 4.2 Atores
 
 - **Aluno:** assina um plano, reserva e cancela aulas, fala com o estúdio pelo WhatsApp.
 - **Atendente / recepção:** revisa as respostas sugeridas pela IA nos casos que não são automáticos, assume conversas
   escaladas e audita uma amostra das respostas automáticas.
-- **Administrador do estúdio:** cadastra turmas e horários (pode ser via seed no início).
+- **Proprietário do estúdio:** administra o próprio estúdio (modalidades, salas, instrutores, turmas e horários;
+  pode ser via seed no início), define os papéis e edita os dados de alunos e funcionários.
+- **Instrutor:** dá as aulas das modalidades a que está vinculado.
+- **Equipe do sistema (admin):** os desenvolvedores e os tech leads. Cria e desativa estúdios.
 
 ### 4.3 Funcionalidades
 
-**Planos**
+**Planos e diária**
 - **Ilimitado:** assinatura recorrente mensal, trimestral ou anual (Stripe Billing, modo teste). Reserva quantas aulas quiser.
-- **Pacote de créditos:** por exemplo, 8 aulas por mês. Cada reserva consome um crédito; cancelar dentro do prazo devolve.
+- **Diária:** pagamento avulso (Stripe Checkout, modo teste) para quem não tem plano. Vale por um dia, para a área
+  livre e para as aulas com reserva. Como ela se liga à reserva ainda está em aberto (seção 10).
+- **Área de acesso livre** (ex.: musculação): exige plano ativo ou diária paga.
+
+**Estúdios e modalidades**
+- Vários estúdios no mesmo sistema, cada um com suas modalidades, salas e instrutores.
+- Cada modalidade exige reserva (turma com vagas) ou é de acesso livre (ex.: musculação).
 
 **Turmas e reservas**
-- Uma turma tem modalidade, horário, instrutor e **número máximo de vagas**.
+- Uma turma tem modalidade, horário, instrutor, sala e **número máximo de vagas**.
 - O aluno reserva uma vaga; pode cancelar até um prazo antes da aula.
 - **Lista de espera:** turma cheia → o aluno entra na fila; quando alguém cancela, a vaga vai para o próximo.
 - O que o aluno pode fazer depende do estado do plano (ex.: com o pagamento atrasado, pode reservar?).
@@ -204,12 +217,12 @@ Histórico da escolha, para contexto:
 | Problema | Cenário concreto |
 |---|---|
 | Concorrência | A aula tem 12 vagas e 30 alunos tentam reservar quando a agenda abre |
-| Concorrência | Um aluno com 1 crédito reserva duas aulas ao mesmo tempo (app e WhatsApp); o saldo não pode ficar negativo |
+| Concorrência | Um aluno paga a diária para a última vaga enquanto outro aluno reserva a mesma vaga |
 | Concorrência | Duas pessoas cancelam ao mesmo tempo e a lista de espera promove o mesmo aluno duas vezes, ou promove alguém para uma vaga que não existe |
-| Idempotência | Clique duplo em "Assinar" ou "Comprar pacote" |
-| Idempotência | O aluno cancela uma reserva duas vezes; o crédito volta uma vez só |
+| Idempotência | Clique duplo em "Assinar" ou "Pagar diária" |
+| Idempotência | O aluno cancela uma reserva duas vezes; a vaga é liberada e a lista de espera avança uma vez só |
 | Webhooks | Pagamento confirmado, renovação, falha no cartão, cancelamento; eventos duplicados e fora de ordem |
-| Transações | Reservar = ocupar a vaga + debitar o crédito, tudo ou nada |
+| Transações | Confirmar uma diária = registrar o pagamento + garantir a vaga, tudo ou nada |
 | Máquina de estados | Assinatura (`pending → active → past_due → canceled`) e reserva (reservada, cancelada, compareceu, faltou) |
 | Reconciliação | Um webhook se perdeu: o aluno pagou e o sistema não liberou |
 | Filas | Promoção da lista de espera, classificação das mensagens, avisos ao aluno |
@@ -218,7 +231,7 @@ Histórico da escolha, para contexto:
 
 ### 4.5 Fora de escopo (por enquanto)
 
-- Vender o sistema, multi-tenancy (vários estúdios no mesmo sistema), aplicativo mobile.
+- Vender o sistema, aplicativo mobile.
 - Controle de presença por QR code, avaliação física, treinos.
 - Pagamento por Pix ou segundo gateway.
 - A IA executando ações (reservar, cancelar, reembolsar). Pode virar uma extensão depois que o básico estiver sólido.
@@ -226,23 +239,23 @@ Histórico da escolha, para contexto:
 
 ---
 
-## 5. Equipe: dois devs e um tech lead
+## 5. Equipe: dois devs e dois tech leads
 
-### 5.1 O que o tech lead pode fazer
+### 5.1 O que os tech leads podem fazer
 
-O tech lead é um sênior com **tempo limitado**. O melhor uso desse tempo é **orientar e revisar**, não programar.
+Os tech leads são seniores com **tempo limitado**. O melhor uso desse tempo é **orientar e revisar**, não programar.
 
 | Papel | Como funciona na prática |
 |---|---|
-| **Aprovar decisões de arquitetura** | Os devs levam 2 ou 3 opções com prós e contras; ele questiona e aprova. Ele não decide sozinho por nós |
+| **Aprovar decisões de arquitetura** | Os devs levam 2 ou 3 opções com prós e contras; eles questionam e aprovam. Não decidem por nós |
 | **Revisar PRs dos problemas centrais** | Revisão com perguntas ("e se o worker cair aqui?"), não reescrevendo o código |
-| **Propor desafios** | Sugerir cenários de falha que não pensamos, como um entrevistador faria |
-| **Destravar** | Quando os dois devs estão travados depois de tentar, ele dá uma pista, não a solução |
+| **Propor desafios** | Sugerir cenários de falha que não pensamos |
+| **Destravar** | Quando os dois devs estão travados depois de tentar, eles dão uma pista, não a solução |
 | **Definir padrões** | Fluxo de branches, convenções de PR, o que é "pronto" |
 | **Revisão de fim de fase** | Ao fim de cada fase, uma conversa sobre o que foi feito, o que ficou fraco, o que aprender |
-| **Simular entrevista** | Pedir para cada dev explicar um problema resolvido como se fosse numa entrevista |
+| **Pedir explicações** | Pedir para cada dev explicar um problema resolvido sem consultar o código |
 
-O que o tech lead **não** deve fazer: escrever a solução dos problemas centrais ou tomar as decisões no nosso lugar.
+O que os tech leads **não** devem fazer: escrever a solução dos problemas centrais ou tomar as decisões no nosso lugar.
 O aprendizado está em errar e decidir.
 
 ### 5.2 Divisão entre os dois devs
@@ -250,15 +263,15 @@ O aprendizado está em errar e decidir.
 O risco de dividir por módulo (um fica com cobrança, o outro com atendimento) é **cada um aprender metade do projeto**.
 Por isso:
 
-- **Todo PR é revisado pelo outro dev** antes de ir para o tech lead (quando for o caso).
+- **Todo PR é revisado pelo outro dev** antes de ir para os tech leads (quando for o caso).
 - **Problemas centrais em dupla ou em revezamento.** Uma boa dinâmica: um dev escreve o teste que **prova o bug**,
   o outro implementa a correção. No problema seguinte, invertem.
 - **Quem resolveu explica para o outro.** Se o outro não consegue explicar de volta, ainda não terminou.
 - **Revezar áreas** entre as fases: quem fez webhooks numa fase faz filas na outra.
 
-### 5.3 O que fazer sozinho, em dupla e com o tech lead
+### 5.3 O que fazer sozinho, em dupla e com os tech leads
 
-| Fazer sozinho | Fazer em dupla (os dois devs) | Levar ao tech lead |
+| Fazer sozinho | Fazer em dupla (os dois devs) | Levar aos tech leads |
 |---|---|---|
 | Tarefas repetitivas e CRUD simples | Problemas centrais (concorrência, idempotência, webhooks, filas, validação da IA) | Decisões de arquitetura, **antes** de implementar, com opções e trade-offs |
 | A primeira tentativa num problema, com tempo limite | Revisão de todo PR | Modelagem inicial do banco |
@@ -268,17 +281,17 @@ Por isso:
 | | | Quando os dois devs discordam e não chegam a um acordo |
 | | | Revisão de fim de fase |
 
-**Não levar ao tech lead:** dúvidas que a documentação ou uma explicação de IA resolvem, bugs triviais, estilo de código
+**Não levar aos tech leads:** dúvidas que a documentação ou uma explicação de IA resolvem, bugs triviais, estilo de código
 (o linter resolve).
 
-**Sugestão de tempo limite:** cerca de 2 horas sozinho, depois 1 hora em dupla. Ainda travado, leva ao tech lead.
+**Sugestão de tempo limite:** cerca de 2 horas sozinho, depois 1 hora em dupla. Ainda travado, leva aos tech leads.
 
-**Como levar algo ao tech lead:** nunca "não funciona". Sempre: qual é o problema, o que já tentamos, quais opções
+**Como levar algo aos tech leads:** nunca "não funciona". Sempre: qual é o problema, o que já tentamos, quais opções
 vemos e qual preferimos e por quê.
 
 ### 5.4 Rituais sugeridos
 
-- **Encontro semanal curto** com o tech lead (30 a 60 minutos): o que foi feito, decisões pendentes, bloqueios.
+- **Encontro semanal curto** com os tech leads (30 a 60 minutos): o que foi feito, decisões pendentes, bloqueios.
 - **Quadro de tarefas** (GitHub Projects) com as tarefas de cada fase.
 - **Um PR por problema**, com descrição no formato: problema → teste que prova → opções → escolha → resultado.
 - Branches curtas, commits em inglês (Conventional Commits).
@@ -328,7 +341,13 @@ O que precisamos resolver, na ordem em que os problemas aparecem:
 
 ### 6.3 IA como ferramenta de desenvolvimento
 
-Hoje todo mundo desenvolve com IA, e vamos usar bastante. A regra geral:
+Usamos IA no desenvolvimento com regras claras sobre o que ela pode fazer.
+
+**Análise e projeto são feitos pelos desenvolvedores, à mão:** levantamento de requisitos funcionais e não
+funcionais, desenho da arquitetura, modelagem de dados (MER e DER) e ADRs. A IA participa dessa etapa só revisando e
+fazendo perguntas, sem entregar a resposta.
+
+Para a implementação, a regra geral:
 
 > **A IA pode escrever o que não precisamos aprender. Ela não pode pensar no que estamos aprendendo.**
 
@@ -348,7 +367,7 @@ Só entrega código pronto se pedirmos explicitamente **depois** de tentar. Essa
 [CLAUDE.md](../CLAUDE.md), que o Claude Code lê em toda sessão, e os dois devs usam o mesmo arquivo.
 
 **Teste do quadro branco:** antes do merge de um problema central, o autor precisa conseguir explicar a solução sem
-olhar o código e sem IA, como numa entrevista. Se não consegue, não está pronto.
+olhar o código e sem IA. Se não consegue, não está pronto.
 
 ---
 
@@ -358,13 +377,13 @@ olhar o código e sem IA, como numa entrevista. Se não consegue, não está pro
 2. **Discutir soluções:** pelo menos duas, com trade-offs.
 3. **Implementar** a escolhida.
 4. **Provar a correção:** o mesmo teste agora passa.
-5. **Registrar:** um PR por problema e um ADR curto em [adr/](adr/). O ADR vira base do post técnico.
+5. **Registrar:** um PR por problema e um ADR curto em [adr/](adr/).
 
 ---
 
 ## 8. Stack e decisões
 
-### 8.1 Continuam valendo
+### 8.1 Stack
 
 | Decisão | Observação |
 |---|---|
@@ -372,49 +391,33 @@ olhar o código e sem IA, como numa entrevista. Se não consegue, não está pro
 | Redis + BullMQ | Filas e sessões |
 | Zod, Vitest, Testcontainers | Testes contra Postgres real |
 | Docker Compose, GitHub Actions | `docker compose up` sobe tudo |
-| Stripe Billing em modo teste | Assinaturas recorrentes; o pacote de créditos pode ser pagamento avulso pelo Checkout |
+| Stripe Billing em modo teste | Assinaturas recorrentes; a diária é pagamento avulso pelo Checkout |
 | Evolution API (WhatsApp) + canal HTTP | Atrás da interface `MessageChannel`. Usar um chip secundário: risco de bloqueio do número |
-| Claude API | Atrás da interface `TicketClassifier`. Pago por uso no Console, separado da assinatura do Claude |
+| Claude API | Atrás da interface `TicketClassifier` |
 | Monólito modular + worker | Sem microsserviços |
 | Código e commits em inglês, documentação em português | |
 | Autenticação por sessão com cookie no Redis | |
 
-O tech lead pode querer rever alguma dessas escolhas. Elas são uma proposta, não uma imposição.
+Os tech leads podem querer rever alguma dessas escolhas. Elas são uma proposta, não uma imposição.
 
-### 8.2 Precisam ser revistas por causa do novo produto
+### 8.2 Pendências de arquitetura
 
-- **Módulos:** `courses` deixa de existir. Candidatos: `classes` (turmas e horários), `bookings` (reservas e lista
-  de espera), `billing` (planos, assinaturas, créditos?), `support`. Onde ficam os créditos é uma decisão
-  importante: eles são cobrança ou reserva?
-- **Modelagem de dados:** turmas, vagas, reservas, créditos, lista de espera.
+- **Módulos e seus limites.** Candidatos: `studios` (estúdios, modalidades, salas, instrutores), `classes` (turmas e
+  horários), `bookings` (reservas e lista de espera), `billing` (planos, assinaturas, diárias), `support`.
+  Reservar uma aula paga por diária envolve reserva **e** cobrança: quem é dono do quê?
+- **Multi-tenancy:** como os dados de cada estúdio ficam separados.
+- **Modelagem de dados:** estúdios, usuários e papéis, turmas, vagas, reservas, diárias, lista de espera.
 - **Ordem das fases:** as reservas não dependem do Stripe, então os problemas de concorrência podem vir antes
   dos webhooks.
-- **Nome:** **Overbook**, o bug que o projeto existe para evitar. Ver [DECISOES.md](DECISOES.md).
 
 ---
 
-## 9. Arquitetura: refazer o levantamento?
-
-**Sim, mas não do zero.** O que muda e o que fica:
-
-**Fica** (não depende do produto):
-- a stack, o estilo (monólito modular + worker), ports and adapters;
-- o método de provar o bug com teste;
-- o módulo de atendimento inteligente, praticamente inteiro;
-- a parte de assinatura recorrente e webhooks.
-
-**Muda** (depende do produto):
-- o domínio: turmas, reservas, créditos e lista de espera são novos e são o centro dos problemas de concorrência;
-- os limites entre módulos (ex.: reservar uma aula com crédito envolve reserva **e** cobrança: quem é dono do quê?);
-- a modelagem do banco;
-- a ordem das fases.
-
-**Ordem sugerida:**
+## 9. Próximos passos
 1. **Levantamento de requisitos** a partir deste documento: atores, casos de uso, regras de negócio
    (prazo de cancelamento, regras da lista de espera, o que acontece com reservas futuras quando o plano é cancelado).
 2. **Cuidado com o escopo:** o levantamento tende a gerar funcionalidades demais. Para cada requisito, perguntar:
    "isso gera um problema da seção 3?". Se não gera e não é essencial, fica de fora.
-3. **Arquitetura e modelagem** com base nos requisitos, decididas pelos devs e aprovadas pelo tech lead.
+3. **Arquitetura e modelagem** com base nos requisitos, decididas pelos devs e aprovadas pelos tech leads.
    Registrar no ADR 0001 (módulos e seus limites).
 4. **Planejar as fases** num novo `docs/PLANO.md`.
 
@@ -422,12 +425,13 @@ O tech lead pode querer rever alguma dessas escolhas. Elas são uma proposta, n�
 
 ## 10. Perguntas em aberto para o levantamento
 
-- Quais as regras de cancelamento (prazo, o crédito volta, conta como falta)?
+- Quais as regras de cancelamento (prazo, a diária é estornada, conta como falta)?
 - Como funciona a lista de espera: o próximo entra automaticamente ou recebe uma oferta e precisa aceitar?
 - O plano ilimitado tem limite de aulas por dia?
 - O que acontece com as reservas futuras quando o plano é cancelado ou fica atrasado?
-- Créditos expiram? Um aluno pode ter plano ilimitado e créditos ao mesmo tempo?
+- Quem paga diária paga antes ou depois de garantir a vaga? O que acontece se o pagamento for confirmado e a aula
+  já estiver cheia?
 - Falta sem avisar tem alguma consequência?
-- Uma modalidade ou várias desde o início?
 - Quem cadastra turmas e horários: seed ou painel de administração?
-- Como os dois devs dividem as fases e qual o ritmo de encontros com o tech lead?
+- Um instrutor que também é aluno pode reservar vaga numa aula que ele mesmo dá?
+- Como os dois devs dividem as fases e qual o ritmo de encontros com os tech leads?
